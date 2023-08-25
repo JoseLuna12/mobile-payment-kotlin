@@ -1,22 +1,23 @@
 package com.joseluna.payments.home
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -112,15 +113,20 @@ fun PaymentListItem(date: String, quantity: String){
             Text(text = "$$quantity")
         },
         icon = {
-            Box(modifier = Modifier
-                .height(50.dp)
-                .width(50.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            ) {
-
-            }
+            Icon(
+                Icons.Filled.ShoppingCart,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+//            Box(modifier = Modifier
+//                .height(50.dp)
+//                .width(50.dp)
+//                .background(
+//                    color = MaterialTheme.colorScheme.primary,
+//                )
+//            ) {
+//
+//            }
         }
     )
 }
