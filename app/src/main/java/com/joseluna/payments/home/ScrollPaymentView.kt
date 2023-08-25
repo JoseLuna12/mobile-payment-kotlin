@@ -37,9 +37,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
-inline fun<reified T: StateServiceScrollableList> PaymentListView(modifier: Modifier = Modifier){
+inline fun PaymentListView(
+    modifier: Modifier = Modifier,
+    viewModel: StateServiceScrollableList
+){
 
-    val viewModel = viewModel<T>()
     val coroutineScope = rememberCoroutineScope()
     val state by viewModel.state
     val pagerState = rememberPagerState()
@@ -52,7 +54,7 @@ inline fun<reified T: StateServiceScrollableList> PaymentListView(modifier: Modi
     Column(modifier = modifier) {
         ScrollableTabRow(selectedTabIndex = pagerState.currentPage) {
             state.content.forEachIndexed{index, row ->
-                tabRowItem(
+                TabRowItem(
                     text = row.header,
                     selected = pagerState.currentPage == index
                 ) {
@@ -67,7 +69,7 @@ inline fun<reified T: StateServiceScrollableList> PaymentListView(modifier: Modi
         ) {page ->
                 LazyColumn{
                     items(state.content[page].content){
-                        paymentListItem(date = it.date, quantity = it.quantity)
+                        PaymentListItem(date = it.date, quantity = it.quantity)
                     }
                 }
 
@@ -86,7 +88,7 @@ inline fun<reified T: StateServiceScrollableList> PaymentListView(modifier: Modi
 }
 
 @Composable
-fun tabRowItem(text: String, selected: Boolean, onClick: () -> Unit){
+fun TabRowItem(text: String, selected: Boolean, onClick: () -> Unit){
     Tab(selected = selected,
         modifier = Modifier.height(55.dp),
         onClick = onClick
@@ -101,7 +103,7 @@ fun tabRowItem(text: String, selected: Boolean, onClick: () -> Unit){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun paymentListItem(date: String, quantity: String){
+fun PaymentListItem(date: String, quantity: String){
     ListItem(
         overlineText = {
             Text(text = date)
@@ -128,7 +130,7 @@ fun paymentListItem(date: String, quantity: String){
 fun PaymentListPreview(){
     PaymentsTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            PaymentListView<PaymentViewModel>()
+            PaymentListView(viewModel = viewModel())
         }
     }
 }

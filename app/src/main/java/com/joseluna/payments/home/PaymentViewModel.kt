@@ -97,7 +97,7 @@ class PaymentViewModel() : StateServiceScrollableList() {
     override fun loadToday() {
         viewModelScope.launch {
             _state.value = _state.value.copy(loading = true)
-            var client = PaymentService()
+            val client = PaymentService()
             val values = client.getTodayUpdate()
             val newValues  = _state.value.content.toMutableList()
             newValues[0].updateContent(values)
@@ -110,13 +110,16 @@ class PaymentViewModel() : StateServiceScrollableList() {
 
     override fun newPayment(new: PaymentItem) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(loading = true)
             val values = _state.value.content.toMutableList()
-            val newContent = arrayListOf<PaymentItem>(new)
+            val newContent = arrayListOf(new)
             newContent.addAll(values[0].content)
             values[0].content = newContent
             _state.value = _state.value.copy(
+                loading = false,
                 content = values
             )
+            println("New state added ${values[0].content[0].quantity}")
         }
     }
 

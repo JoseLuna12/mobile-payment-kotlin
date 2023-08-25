@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.joseluna.payments.ui.theme.PaymentsTheme
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeView() {
 
+    val scrollViewModel = viewModel<PaymentViewModel>()
     var showPaymentModal by rememberSaveable {
         mutableStateOf(false)
     }
@@ -41,7 +43,7 @@ fun HomeView() {
 
     val scope = rememberCoroutineScope()
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
+    val skipPartiallyExpanded by remember { mutableStateOf(false) }
     val bottomSheetState = SheetState(
         skipPartiallyExpanded = skipPartiallyExpanded,
         initialValue = SheetValue.Hidden,
@@ -67,7 +69,7 @@ fun HomeView() {
             }
         }) {
 
-        PaymentListView<PaymentViewModel>(modifier = Modifier.padding(it))
+        PaymentListView(modifier = Modifier.padding(it), scrollViewModel)
 
         if (openBottomSheet) {
             ChargeModal(onDismiss = {
@@ -90,9 +92,9 @@ fun HomeView() {
                     showPaymentModal = false
                 }
             ) {
-                paymentModalState = PaymentDialogState.Waiting
-                val newPaymentProcessed = PaymentItem(date = "31", quantity = quantity)
-
+                val newPaymentProcessed = PaymentItem(date = "31 agosto", quantity = quantity)
+                scrollViewModel.newPayment(newPaymentProcessed)
+                showPaymentModal = false
             }
         }
     }
@@ -101,7 +103,7 @@ fun HomeView() {
 
 @Preview(showBackground = true)
 @Composable
-fun previewHome() {
+fun PreviewHome() {
     PaymentsTheme {
         HomeView()
     }
