@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
-inline fun PaymentListView(
+fun PaymentListView(
     modifier: Modifier = Modifier,
     viewModel: StateServiceScrollableList
 ){
@@ -130,7 +130,8 @@ fun PaymentListItem(date: String, quantity: String){
 fun PaymentListPreview(){
     PaymentsTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            PaymentListView(viewModel = viewModel())
+            val viewModel = viewModel<PaymentViewModel>()
+            PaymentListView(viewModel = viewModel)
         }
     }
 }
