@@ -3,7 +3,6 @@ package com.joseluna.payments.home
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -31,6 +30,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joseluna.payments.ui.theme.PaymentsTheme
@@ -63,6 +64,8 @@ fun ChargeModal(
     onChargeButton: (value: String) -> Unit
 ){
 
+    val localHaptic = LocalHapticFeedback.current
+
     var quantity by remember {
         mutableStateOf("0,00")
     }
@@ -70,6 +73,7 @@ fun ChargeModal(
 
     fun handleButtonsClicks(action: ChargeActions){
         val content = action.getContent()
+        localHaptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         when(action){
             ChargeActions.Delete -> quantity = "0,00"
             ChargeActions.Charge -> {
@@ -113,7 +117,7 @@ fun ChargeModal(
     }
 
 
-    var edgeToEdgeEnabled by remember { mutableStateOf(false) }
+    val edgeToEdgeEnabled by remember { mutableStateOf(false) }
     val windowInsets = if (edgeToEdgeEnabled)
         WindowInsets(0) else BottomSheetDefaults.windowInsets
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = state, windowInsets = windowInsets) {
@@ -236,7 +240,7 @@ fun ActionSection(action: (action: ChargeActions) -> Unit){
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
 @Composable
 fun ModalView(){
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
+    val skipPartiallyExpanded by remember { mutableStateOf(false) }
     val bottomSheetState = SheetState(
         skipPartiallyExpanded = skipPartiallyExpanded,
         initialValue = SheetValue.Expanded
@@ -252,7 +256,7 @@ fun ModalView(){
 @Preview(uiMode =  UI_MODE_NIGHT_YES)
 @Composable
 fun ModalViewDark(){
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
+    val skipPartiallyExpanded by remember { mutableStateOf(false) }
     val bottomSheetState = SheetState(
         skipPartiallyExpanded = skipPartiallyExpanded,
         initialValue = SheetValue.Expanded
